@@ -31,7 +31,8 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const HERO_IMG = "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=2000&q=80";
+const HERO_VIDEO = "https://cdn.coverr.co/videos/coverr-trucks-on-highway-7234/1080p.mp4";
+const HERO_POSTER = "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=2000&q=80";
 
 function HomePage() {
   useScrollReveal();
@@ -41,11 +42,11 @@ function HomePage() {
     <div className="min-h-screen bg-background">
       {/* HERO */}
       <section className="relative min-h-[100vh] overflow-hidden text-white">
-        <img
-          src={HERO_IMG}
-          alt="Cargo containers in a global shipping port"
+        <video
+          src={HERO_VIDEO}
+          poster={HERO_POSTER}
+          autoPlay muted loop playsInline
           className="absolute inset-0 h-full w-full object-cover"
-          loading="eager"
         />
         <div className="absolute inset-0 gradient-hero" />
         <div className="relative z-10">
@@ -141,7 +142,7 @@ function HomePage() {
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               { icon: Truck, title: "Local Delivery", desc: "Same-day and next-day delivery within your city.", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80" },
-              { icon: Plane, title: "International Shipping", desc: "Door-to-door shipping in 120+ countries.", img: "https://images.unsplash.com/photo-1569073872325-08b7e4f10122?auto=format&fit=crop&w=900&q=80" },
+              { icon: Plane, title: "International Shipping", desc: "Door-to-door shipping in 120+ countries.", img: "https://images.unsplash.com/photo-1494412519320-aa613df615a4?auto=format&fit=crop&w=900&q=80" },
               { icon: Warehouse, title: "Warehousing", desc: "Modern, secure storage with smart inventory.", img: "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=900&q=80" },
             ].map((s, i) => (
               <article
