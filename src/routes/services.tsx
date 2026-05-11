@@ -32,7 +32,7 @@ const services = [
     icon: Plane,
     title: "International Shipping",
     desc: "Door-to-door air and sea freight to 120+ countries, with full customs handling included.",
-    img: "https://images.unsplash.com/photo-1569073872325-08b7e4f10122?auto=format&fit=crop&w=900&q=80",
+    img: "https://images.unsplash.com/photo-1494412519320-aa613df615a4?auto=format&fit=crop&w=900&q=80",
   },
   {
     icon: Warehouse,
