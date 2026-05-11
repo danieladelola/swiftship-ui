@@ -165,23 +165,23 @@ function Editor({ s, setS }: { s: any; setS: (v: any) => void }) {
     <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
       <h2 className="font-display text-base font-bold text-navy">Shipment details</h2>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
-        <Field label="Sender name" value={s.sender_name} onChange={(v) => set("sender_name", v)} />
-        <Field label="Sender phone" value={s.sender_phone} onChange={(v) => set("sender_phone", v)} />
-        <Field label="Sender email" value={s.sender_email} onChange={(v) => set("sender_email", v)} />
-        <Field label="Sender address" value={s.sender_address} onChange={(v) => set("sender_address", v)} />
-        <Field label="Receiver name" value={s.receiver_name} onChange={(v) => set("receiver_name", v)} />
-        <Field label="Receiver phone" value={s.receiver_phone} onChange={(v) => set("receiver_phone", v)} />
-        <Field label="Receiver email" value={s.receiver_email} onChange={(v) => set("receiver_email", v)} />
-        <Field label="Receiver address" value={s.receiver_address} onChange={(v) => set("receiver_address", v)} />
-        <Field label="Package name" value={s.package_name} onChange={(v) => set("package_name", v)} />
-        <Field label="Package type" value={s.package_type} onChange={(v) => set("package_type", v)} />
-        <Field label="Weight" type="number" value={s.package_weight ?? ""} onChange={(v) => set("package_weight", v ? Number(v) : null)} />
-        <Field label="Quantity" type="number" value={s.package_quantity ?? ""} onChange={(v) => set("package_quantity", v ? Number(v) : null)} />
-        <Field label="Pickup location" value={s.pickup_location} onChange={(v) => set("pickup_location", v)} />
-        <Field label="Delivery location" value={s.delivery_location} onChange={(v) => set("delivery_location", v)} />
-        <Field label="Estimated delivery" type="date" value={s.estimated_delivery_date ?? ""} onChange={(v) => set("estimated_delivery_date", v || null)} />
-        <Field label="Delivery fee" type="number" value={s.delivery_fee ?? ""} onChange={(v) => set("delivery_fee", v ? Number(v) : 0)} />
-        <Field label="Payment status" value={s.payment_status} onChange={(v) => set("payment_status", v)} />
+        <Field label="Sender name" value={s.sender_name} onChange={(v: any) => set("sender_name", v)} />
+        <Field label="Sender phone" value={s.sender_phone} onChange={(v: any) => set("sender_phone", v)} />
+        <Field label="Sender email" value={s.sender_email} onChange={(v: any) => set("sender_email", v)} />
+        <Field label="Sender address" value={s.sender_address} onChange={(v: any) => set("sender_address", v)} />
+        <Field label="Receiver name" value={s.receiver_name} onChange={(v: any) => set("receiver_name", v)} />
+        <Field label="Receiver phone" value={s.receiver_phone} onChange={(v: any) => set("receiver_phone", v)} />
+        <Field label="Receiver email" value={s.receiver_email} onChange={(v: any) => set("receiver_email", v)} />
+        <Field label="Receiver address" value={s.receiver_address} onChange={(v: any) => set("receiver_address", v)} />
+        <Field label="Package name" value={s.package_name} onChange={(v: any) => set("package_name", v)} />
+        <Field label="Package type" value={s.package_type} onChange={(v: any) => set("package_type", v)} />
+        <Field label="Weight" type="number" value={s.package_weight ?? ""} onChange={(v: any) => set("package_weight", v ? Number(v) : null)} />
+        <Field label="Quantity" type="number" value={s.package_quantity ?? ""} onChange={(v: any) => set("package_quantity", v ? Number(v) : null)} />
+        <Field label="Pickup location" value={s.pickup_location} onChange={(v: any) => set("pickup_location", v)} />
+        <Field label="Delivery location" value={s.delivery_location} onChange={(v: any) => set("delivery_location", v)} />
+        <Field label="Estimated delivery" type="date" value={s.estimated_delivery_date ?? ""} onChange={(v: any) => set("estimated_delivery_date", v || null)} />
+        <Field label="Delivery fee" type="number" value={s.delivery_fee ?? ""} onChange={(v: any) => set("delivery_fee", v ? Number(v) : 0)} />
+        <Field label="Payment status" value={s.payment_status} onChange={(v: any) => set("payment_status", v)} />
         <div className="md:col-span-2">
           <label className="text-sm font-medium text-navy">Note</label>
           <textarea rows={3} value={s.note ?? ""} onChange={(e) => set("note", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" />

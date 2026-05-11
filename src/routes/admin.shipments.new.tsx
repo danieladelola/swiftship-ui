@@ -56,38 +56,38 @@ function NewShipment() {
 
       <form onSubmit={submit} className="space-y-6">
         <Section title="Tracking">
-          <Input label="Tracking number (optional)" value={f.tracking_number} onChange={(v) => set("tracking_number", v)} placeholder="auto-generated" />
+          <Input label="Tracking number (optional)" value={f.tracking_number} onChange={(v: any) => set("tracking_number", v)} placeholder="auto-generated" />
         </Section>
 
         <Section title="Sender">
-          <Input label="Name *" required value={f.sender_name} onChange={(v) => set("sender_name", v)} />
-          <Input label="Phone" value={f.sender_phone} onChange={(v) => set("sender_phone", v)} />
-          <Input label="Email" value={f.sender_email} onChange={(v) => set("sender_email", v)} type="email" />
-          <Input label="Address" value={f.sender_address} onChange={(v) => set("sender_address", v)} className="md:col-span-2" />
+          <Input label="Name *" required value={f.sender_name} onChange={(v: any) => set("sender_name", v)} />
+          <Input label="Phone" value={f.sender_phone} onChange={(v: any) => set("sender_phone", v)} />
+          <Input label="Email" value={f.sender_email} onChange={(v: any) => set("sender_email", v)} type="email" />
+          <Input label="Address" value={f.sender_address} onChange={(v: any) => set("sender_address", v)} className="md:col-span-2" />
         </Section>
 
         <Section title="Receiver">
-          <Input label="Name *" required value={f.receiver_name} onChange={(v) => set("receiver_name", v)} />
-          <Input label="Phone" value={f.receiver_phone} onChange={(v) => set("receiver_phone", v)} />
-          <Input label="Email" value={f.receiver_email} onChange={(v) => set("receiver_email", v)} type="email" />
-          <Input label="Address" value={f.receiver_address} onChange={(v) => set("receiver_address", v)} className="md:col-span-2" />
+          <Input label="Name *" required value={f.receiver_name} onChange={(v: any) => set("receiver_name", v)} />
+          <Input label="Phone" value={f.receiver_phone} onChange={(v: any) => set("receiver_phone", v)} />
+          <Input label="Email" value={f.receiver_email} onChange={(v: any) => set("receiver_email", v)} type="email" />
+          <Input label="Address" value={f.receiver_address} onChange={(v: any) => set("receiver_address", v)} className="md:col-span-2" />
         </Section>
 
         <Section title="Package">
-          <Input label="Package name" value={f.package_name} onChange={(v) => set("package_name", v)} />
-          <Input label="Package type" value={f.package_type} onChange={(v) => set("package_type", v)} placeholder="Box, Envelope, Pallet…" />
-          <Input label="Weight (kg)" type="number" value={f.package_weight} onChange={(v) => set("package_weight", v)} />
-          <Input label="Quantity" type="number" value={f.package_quantity} onChange={(v) => set("package_quantity", v)} />
-          <Input label="Pickup location" value={f.pickup_location} onChange={(v) => set("pickup_location", v)} />
-          <Input label="Delivery location" value={f.delivery_location} onChange={(v) => set("delivery_location", v)} />
-          <Input label="Current location" value={f.current_location} onChange={(v) => set("current_location", v)} className="md:col-span-2" />
+          <Input label="Package name" value={f.package_name} onChange={(v: any) => set("package_name", v)} />
+          <Input label="Package type" value={f.package_type} onChange={(v: any) => set("package_type", v)} placeholder="Box, Envelope, Pallet…" />
+          <Input label="Weight (kg)" type="number" value={f.package_weight} onChange={(v: any) => set("package_weight", v)} />
+          <Input label="Quantity" type="number" value={f.package_quantity} onChange={(v: any) => set("package_quantity", v)} />
+          <Input label="Pickup location" value={f.pickup_location} onChange={(v: any) => set("pickup_location", v)} />
+          <Input label="Delivery location" value={f.delivery_location} onChange={(v: any) => set("delivery_location", v)} />
+          <Input label="Current location" value={f.current_location} onChange={(v: any) => set("current_location", v)} className="md:col-span-2" />
         </Section>
 
         <Section title="Status & payment">
-          <Select label="Status" value={f.status} onChange={(v) => set("status", v)} options={STATUSES} />
-          <Input label="Estimated delivery date" type="date" value={f.estimated_delivery_date} onChange={(v) => set("estimated_delivery_date", v)} />
-          <Input label="Delivery fee" type="number" value={f.delivery_fee} onChange={(v) => set("delivery_fee", v)} />
-          <Select label="Payment status" value={f.payment_status} onChange={(v) => set("payment_status", v)} options={PAY} />
+          <Select label="Status" value={f.status} onChange={(v: any) => set("status", v)} options={STATUSES} />
+          <Input label="Estimated delivery date" type="date" value={f.estimated_delivery_date} onChange={(v: any) => set("estimated_delivery_date", v)} />
+          <Input label="Delivery fee" type="number" value={f.delivery_fee} onChange={(v: any) => set("delivery_fee", v)} />
+          <Select label="Payment status" value={f.payment_status} onChange={(v: any) => set("payment_status", v)} options={PAY} />
           <div className="md:col-span-2">
             <label className="text-sm font-medium text-navy">Note</label>
             <textarea value={f.note} onChange={(e) => set("note", e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm focus:border-orange focus:outline-none" />

@@ -12,8 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrackRouteImport } from './routes/track'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminShipmentsIndexRouteImport } from './routes/admin.shipments.index'
+import { Route as AdminShipmentsNewRouteImport } from './routes/admin.shipments.new'
+import { Route as AdminShipmentsIdRouteImport } from './routes/admin.shipments.$id'
 
 const TrackRoute = TrackRouteImport.update({
   id: '/track',
@@ -30,6 +36,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -40,13 +51,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminShipmentsIndexRoute = AdminShipmentsIndexRouteImport.update({
+  id: '/shipments/',
+  path: '/shipments/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminShipmentsNewRoute = AdminShipmentsNewRouteImport.update({
+  id: '/shipments/new',
+  path: '/shipments/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminShipmentsIdRoute = AdminShipmentsIdRouteImport.update({
+  id: '/shipments/$id',
+  path: '/shipments/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
   '/track': typeof TrackRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/shipments/$id': typeof AdminShipmentsIdRoute
+  '/admin/shipments/new': typeof AdminShipmentsNewRoute
+  '/admin/shipments/': typeof AdminShipmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,26 +96,71 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
   '/track': typeof TrackRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/shipments/$id': typeof AdminShipmentsIdRoute
+  '/admin/shipments/new': typeof AdminShipmentsNewRoute
+  '/admin/shipments': typeof AdminShipmentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
   '/track': typeof TrackRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/shipments/$id': typeof AdminShipmentsIdRoute
+  '/admin/shipments/new': typeof AdminShipmentsNewRoute
+  '/admin/shipments/': typeof AdminShipmentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/services' | '/track'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/contact'
+    | '/services'
+    | '/track'
+    | '/admin/login'
+    | '/admin/'
+    | '/admin/shipments/$id'
+    | '/admin/shipments/new'
+    | '/admin/shipments/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/services' | '/track'
-  id: '__root__' | '/' | '/about' | '/contact' | '/services' | '/track'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/services'
+    | '/track'
+    | '/admin/login'
+    | '/admin'
+    | '/admin/shipments/$id'
+    | '/admin/shipments/new'
+    | '/admin/shipments'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/contact'
+    | '/services'
+    | '/track'
+    | '/admin/login'
+    | '/admin/'
+    | '/admin/shipments/$id'
+    | '/admin/shipments/new'
+    | '/admin/shipments/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ContactRoute: typeof ContactRoute
   ServicesRoute: typeof ServicesRoute
   TrackRoute: typeof TrackRoute
@@ -102,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -116,12 +210,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/shipments/': {
+      id: '/admin/shipments/'
+      path: '/shipments'
+      fullPath: '/admin/shipments/'
+      preLoaderRoute: typeof AdminShipmentsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/shipments/new': {
+      id: '/admin/shipments/new'
+      path: '/shipments/new'
+      fullPath: '/admin/shipments/new'
+      preLoaderRoute: typeof AdminShipmentsNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/shipments/$id': {
+      id: '/admin/shipments/$id'
+      path: '/shipments/$id'
+      fullPath: '/admin/shipments/$id'
+      preLoaderRoute: typeof AdminShipmentsIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminShipmentsIdRoute: typeof AdminShipmentsIdRoute
+  AdminShipmentsNewRoute: typeof AdminShipmentsNewRoute
+  AdminShipmentsIndexRoute: typeof AdminShipmentsIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminShipmentsIdRoute: AdminShipmentsIdRoute,
+  AdminShipmentsNewRoute: AdminShipmentsNewRoute,
+  AdminShipmentsIndexRoute: AdminShipmentsIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   ContactRoute: ContactRoute,
   ServicesRoute: ServicesRoute,
   TrackRoute: TrackRoute,
