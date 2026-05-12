@@ -1,17 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect, useCallback } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import {
-  Search, PackageSearch, Package, Truck, PackageCheck, MapPin, Calendar,
+  Search, PackageSearch, Package, Truck, PackageCheck, MapPin,
   CheckCircle2, Clock, User, Loader2, AlertCircle, Printer, Download, CreditCard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type TrackSearch = { tracking?: string };
+
 export const Route = createFileRoute("/track")({
+  validateSearch: (s: Record<string, unknown>): TrackSearch => ({
+    tracking: typeof s.tracking === "string" && s.tracking.trim()
+      ? s.tracking.trim()
+      : typeof s.id === "string" && s.id.trim()
+      ? s.id.trim()
+      : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Track Your Shipment | Vura Logistics" },
@@ -29,42 +38,23 @@ function statusIcon(status: string) {
 
 function TrackPage() {
   useScrollReveal();
-  const [input, setInput] = useState("");
+  const { tracking: urlTracking } = Route.useSearch();
+  const navigate = useNavigate({ from: "/track" });
+
+  const [input, setInput] = useState(urlTracking ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [shipment, setShipment] = useState<any | null>(null);
   const [history, setHistory] = useState<any[]>([]);
 
-  // Read ?tracking= (or legacy ?id=) from URL on mount + on history nav
-  useEffect(() => {
-    function syncFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      const t = params.get("tracking") || params.get("id");
-      if (t) {
-        setInput(t);
-        search(t);
-      } else {
-        setShipment(null);
-        setHistory([]);
-        setError(null);
-      }
-    }
-    syncFromUrl();
-    window.addEventListener("popstate", syncFromUrl);
-    return () => window.removeEventListener("popstate", syncFromUrl);
-  }, []);
-
-  async function search(value?: string) {
-    const tn = (value ?? input).trim();
-    if (!tn) {
-      setError("Please enter a tracking number.");
-      return;
-    }
+  const runSearch = useCallback(async (value: string) => {
+    const tn = value.trim();
+    if (!tn) return;
     setLoading(true); setError(null); setShipment(null); setHistory([]);
     const { data, error: err } = await supabase
       .from("shipments").select("*").ilike("tracking_number", tn).maybeSingle();
     if (err || !data) {
-      setError("Tracking number not found. Please check and try again.");
+      setError(`Tracking number "${tn}" not found. Please check and try again.`);
       setLoading(false);
       return;
     }
@@ -74,17 +64,33 @@ function TrackPage() {
     setShipment(data);
     setHistory(ups ?? []);
     setLoading(false);
-  }
+  }, []);
+
+  // React to URL ?tracking= changes — auto-fill + auto-fetch
+  useEffect(() => {
+    if (urlTracking) {
+      setInput(urlTracking);
+      runSearch(urlTracking);
+    } else {
+      setShipment(null);
+      setHistory([]);
+      setError(null);
+      setLoading(false);
+    }
+  }, [urlTracking, runSearch]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const tn = input.trim();
     if (!tn) { setError("Please enter a tracking number."); return; }
-    // update URL without full reload
-    const url = `/track?tracking=${encodeURIComponent(tn)}`;
-    window.history.pushState({}, "", url);
-    search(tn);
+    if (tn === urlTracking) {
+      // same query — just refetch
+      runSearch(tn);
+    } else {
+      navigate({ search: { tracking: tn }, replace: false });
+    }
   }
+
 
   function handlePrint() {
     window.print();
