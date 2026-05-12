@@ -36,6 +36,7 @@ const HERO_POSTER = "https://images.unsplash.com/photo-1601584115197-04ecc0da31d
 
 function HomePage() {
   useScrollReveal();
+  const navigate = useNavigate();
   const [tracking, setTracking] = useState("");
 
   return (
