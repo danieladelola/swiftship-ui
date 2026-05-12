@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   ArrowRight,
@@ -36,6 +36,7 @@ const HERO_POSTER = "https://images.unsplash.com/photo-1601584115197-04ecc0da31d
 
 function HomePage() {
   useScrollReveal();
+  const navigate = useNavigate();
   const [tracking, setTracking] = useState("");
 
   return (
@@ -69,7 +70,8 @@ function HomePage() {
                 onSubmit={(e) => {
                   e.preventDefault();
                   const t = tracking.trim();
-                  if (t) window.location.href = `/track?tracking=${encodeURIComponent(t)}`;
+                  if (!t) return;
+                  navigate({ to: "/track", search: { tracking: t } });
                 }}
                 className="mt-10 flex w-full max-w-xl items-center gap-2 rounded-full border border-white/20 bg-white/10 p-2 backdrop-blur-md"
               >
