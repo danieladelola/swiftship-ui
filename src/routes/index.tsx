@@ -70,7 +70,8 @@ function HomePage() {
                 onSubmit={(e) => {
                   e.preventDefault();
                   const t = tracking.trim();
-                  if (t) window.location.href = `/track?tracking=${encodeURIComponent(t)}`;
+                  if (!t) return;
+                  navigate({ to: "/track", search: { tracking: t } });
                 }}
                 className="mt-10 flex w-full max-w-xl items-center gap-2 rounded-full border border-white/20 bg-white/10 p-2 backdrop-blur-md"
               >
