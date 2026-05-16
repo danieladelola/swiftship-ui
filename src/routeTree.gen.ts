@@ -16,6 +16,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminShipmentsIndexRouteImport } from './routes/admin.shipments.index'
 import { Route as AdminShipmentsNewRouteImport } from './routes/admin.shipments.new'
@@ -56,6 +57,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/track': typeof TrackRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/shipments/$id': typeof AdminShipmentsIdRoute
   '/admin/shipments/new': typeof AdminShipmentsNewRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/track': typeof TrackRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin': typeof AdminIndexRoute
   '/admin/shipments/$id': typeof AdminShipmentsIdRoute
   '/admin/shipments/new': typeof AdminShipmentsNewRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/track': typeof TrackRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/shipments/$id': typeof AdminShipmentsIdRoute
   '/admin/shipments/new': typeof AdminShipmentsNewRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/track'
     | '/admin/login'
+    | '/admin/settings'
     | '/admin/'
     | '/admin/shipments/$id'
     | '/admin/shipments/new'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/track'
     | '/admin/login'
+    | '/admin/settings'
     | '/admin'
     | '/admin/shipments/$id'
     | '/admin/shipments/new'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/track'
     | '/admin/login'
+    | '/admin/settings'
     | '/admin/'
     | '/admin/shipments/$id'
     | '/admin/shipments/new'
@@ -217,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -250,6 +269,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminShipmentsIdRoute: typeof AdminShipmentsIdRoute
   AdminShipmentsNewRoute: typeof AdminShipmentsNewRoute
@@ -258,6 +278,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminShipmentsIdRoute: AdminShipmentsIdRoute,
   AdminShipmentsNewRoute: AdminShipmentsNewRoute,

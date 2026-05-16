@@ -411,7 +411,7 @@ function StaffTab() {
 
   async function togglePerm(uid: string, key: keyof StaffRow["perms"], v: boolean) {
     setRows((rs) => rs.map((r) => r.user_id === uid ? { ...r, perms: { ...r.perms, [key]: v } } : r));
-    const { error } = await supabase.from("staff_permissions").upsert({ user_id: uid, [key]: v });
+    const { error } = await supabase.from("staff_permissions").upsert({ user_id: uid, [key]: v } as never);
     if (error) toast.error(error.message);
   }
 
