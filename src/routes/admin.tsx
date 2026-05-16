@@ -2,8 +2,9 @@ import { createFileRoute, Link, Outlet, useNavigate, useLocation } from "@tansta
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import {
-  LayoutDashboard, Package, PlusCircle, LogOut, Truck, Loader2, Menu,
+  LayoutDashboard, Package, PlusCircle, LogOut, Loader2, Menu, Settings as SettingsIcon,
 } from "lucide-react";
+import { BrandLogo, useSettings } from "@/lib/settings";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,8 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminLayout() {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, isAdmin, isSuperAdmin, loading, signOut } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
   const loc = useLocation();
   const [open, setOpen] = useState(false);
@@ -36,10 +38,11 @@ function AdminLayout() {
   }
 
   const nav = [
-    { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-    { to: "/admin/shipments", label: "Shipments", icon: Package },
-    { to: "/admin/shipments/new", label: "Create Shipment", icon: PlusCircle },
-  ];
+    { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true, show: true },
+    { to: "/admin/shipments", label: "Shipments", icon: Package, show: true },
+    { to: "/admin/shipments/new", label: "Create Shipment", icon: PlusCircle, show: true },
+    { to: "/admin/settings", label: "Settings", icon: SettingsIcon, show: isSuperAdmin },
+  ].filter((n) => n.show);
 
   return (
     <div className="flex min-h-screen bg-secondary">
@@ -47,11 +50,9 @@ function AdminLayout() {
         "fixed inset-y-0 left-0 z-40 w-64 -translate-x-full border-r border-border bg-card transition-transform lg:static lg:translate-x-0",
         open && "translate-x-0"
       )}>
-        <div className="flex h-16 items-center gap-2 border-b border-border px-6 font-display text-lg font-bold text-navy">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg gradient-accent text-primary">
-            <Truck className="h-4 w-4" />
-          </span>
-          Vura Admin
+        <div className="flex h-16 items-center gap-2 border-b border-border px-6">
+          <BrandLogo className="h-8 w-auto" fallbackTextClass="text-navy font-display text-base" />
+          <span className="font-display text-sm font-bold text-navy">{settings.main_logo_url ? "" : "Admin"}</span>
         </div>
         <nav className="space-y-1 p-4">
           {nav.map((n) => (
