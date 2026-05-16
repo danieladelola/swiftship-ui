@@ -101,6 +101,7 @@ function ContactPage() {
           <div className="reveal space-y-4 lg:col-span-2">
             <ContactInfoCards />
           </div>
+        </div>
       </section>
 
       {/* Map placeholder */}
