@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Truck } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSettings, BrandLogo } from "@/lib/settings";
 
 const links = [
   { to: "/", label: "Home" },
@@ -17,6 +18,7 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
   const [open, setOpen] = useState(false);
+  const { settings } = useSettings();
   const isTransparent = variant === "transparent";
 
   return (
@@ -28,10 +30,12 @@ export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
         <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold">
-          <span className={cn("flex h-9 w-9 items-center justify-center rounded-lg gradient-accent text-primary")}>
-            <Truck className="h-5 w-5" />
-          </span>
-          <span className={cn(isTransparent ? "text-white" : "text-navy")}>Veloxa</span>
+          <BrandLogo
+            variant={isTransparent ? "light" : "main"}
+            className="h-9 w-auto"
+            fallbackTextClass={isTransparent ? "text-white text-xl" : "text-navy text-xl"}
+          />
+          {!settings.main_logo_url && false}
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

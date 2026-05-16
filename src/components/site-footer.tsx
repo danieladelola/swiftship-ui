@@ -1,26 +1,32 @@
 import { Link } from "@tanstack/react-router";
-import { Truck, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { useSettings, BrandLogo } from "@/lib/settings";
 
 export function SiteFooter() {
+  const { settings } = useSettings();
+  const socials = [
+    { Icon: Facebook, url: settings.social_facebook },
+    { Icon: Twitter, url: settings.social_twitter },
+    { Icon: Linkedin, url: settings.social_linkedin },
+    { Icon: Instagram, url: settings.social_instagram },
+  ];
+
   return (
     <footer className="bg-navy-deep text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg gradient-accent">
-                <Truck className="h-5 w-5 text-primary" />
-              </span>
-              Veloxa
+              <BrandLogo variant="light" className="h-10 w-auto" fallbackTextClass="text-white text-xl" />
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-white/70">
-              Fast, reliable, and global logistics solutions trusted by businesses and individuals worldwide.
-            </p>
+            <p className="mt-4 text-sm leading-relaxed text-white/70">{settings.website_tagline}</p>
             <div className="mt-6 flex gap-3">
-              {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
+              {socials.map(({ Icon, url }, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href={url || "#"}
+                  target={url ? "_blank" : undefined}
+                  rel={url ? "noopener noreferrer" : undefined}
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white/80 transition-colors hover:bg-orange hover:text-primary"
                 >
                   <Icon className="h-4 w-4" />
@@ -56,23 +62,23 @@ export function SiteFooter() {
             <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Get in Touch</h4>
             <ul className="mt-5 space-y-4 text-sm text-white/70">
               <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 text-orange" />
-                <span>221 Harbor Avenue, Suite 500<br />San Francisco, CA 94107</span>
+                <MapPin className="mt-0.5 h-4 w-4 text-orange shrink-0" />
+                <span>{settings.address}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 text-orange" />
-                <span>+1 (415) 555-0199</span>
+                <span>{settings.phone}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-orange" />
-                <span>hello@veloxa.com</span>
+                <span>{settings.email}</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/50 md:flex-row">
-          <p>© {new Date().getFullYear()} Veloxa Logistics. All rights reserved.</p>
+          <p>{settings.footer_text.replace(/\{year\}/g, String(new Date().getFullYear()))}</p>
           <div className="flex gap-5">
             <a href="#" className="hover:text-white">Privacy</a>
             <a href="#" className="hover:text-white">Terms</a>

@@ -1,16 +1,18 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
-import { Truck, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { BrandLogo, useSettings } from "@/lib/settings";
 
 export const Route = createFileRoute("/admin/login")({
-  head: () => ({ meta: [{ title: "Admin Login | Vura Logistics" }] }),
+  head: () => ({ meta: [{ title: "Admin Login | VURALOGISTICS" }] }),
   component: AdminLogin,
 });
 
 function AdminLogin() {
   const { signIn, user, isAdmin, loading } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
   const [email, setEmail] = useState("admin@vura.ng");
   const [password, setPassword] = useState("");
@@ -36,12 +38,9 @@ function AdminLogin() {
     <div className="flex min-h-screen items-center justify-center bg-secondary px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-elevated">
         <Link to="/" className="mb-6 inline-flex items-center gap-2 font-display text-xl font-bold text-navy">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg gradient-accent text-primary">
-            <Truck className="h-5 w-5" />
-          </span>
-          Vura Admin
+          <BrandLogo className="h-10 w-auto" fallbackTextClass="text-navy text-xl" />
         </Link>
-        <h1 className="font-display text-2xl font-bold text-navy">Sign in to your dashboard</h1>
+        <h1 className="font-display text-2xl font-bold text-navy">Sign in to {settings.website_name} admin</h1>
         <p className="mt-1 text-sm text-muted-foreground">Use your admin credentials to access the control panel.</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
