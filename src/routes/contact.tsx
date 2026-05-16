@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { Phone, Mail, MapPin, Send, Facebook, Twitter, Linkedin, Instagram, MapPinned } from "lucide-react";
 import { toast } from "sonner";
+import { useSettings } from "@/lib/settings";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -155,5 +156,53 @@ function Field({
         className="mt-2 w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:border-orange focus:outline-none focus:ring-2 focus:ring-orange/20"
       />
     </div>
+  );
+}
+
+function ContactInfoCards() {
+  const { settings } = useSettings();
+  const cards = [
+    { icon: Phone, title: "Call us", lines: [settings.phone, "Mon–Sun, 24/7 support"] },
+    { icon: Mail, title: "Email us", lines: [settings.email] },
+    { icon: MapPin, title: "Visit us", lines: [settings.address] },
+  ];
+  const socials = [
+    { Icon: Facebook, url: settings.social_facebook },
+    { Icon: Twitter, url: settings.social_twitter },
+    { Icon: Linkedin, url: settings.social_linkedin },
+    { Icon: Instagram, url: settings.social_instagram },
+  ];
+  return (
+    <>
+      {cards.map((c) => (
+        <div key={c.title} className="flex gap-4 rounded-2xl border border-border bg-card p-6 shadow-card">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl gradient-accent text-primary">
+            <c.icon className="h-5 w-5" />
+          </span>
+          <div>
+            <h3 className="font-semibold text-navy">{c.title}</h3>
+            {c.lines.map((l) => (
+              <p key={l} className="text-sm text-muted-foreground">{l}</p>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
+        <h3 className="font-semibold text-navy">Follow us</h3>
+        <div className="mt-3 flex gap-3">
+          {socials.map(({ Icon, url }, i) => (
+            <a
+              key={i}
+              href={url || "#"}
+              target={url ? "_blank" : undefined}
+              rel={url ? "noopener noreferrer" : undefined}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-navy transition-colors hover:gradient-accent hover:text-primary"
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
