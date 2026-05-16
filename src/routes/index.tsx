@@ -24,8 +24,8 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Veloxa — Fast & Reliable Logistics, Delivered Worldwide" },
-      { name: "description", content: "Ship local, interstate, or international with Veloxa. Real-time tracking, warehousing, and e-commerce logistics built for modern businesses." },
+      { title: "VURALOGISTICS — Fast & Reliable Logistics, Delivered Worldwide" },
+      { name: "description", content: "Ship local, interstate, or international with VURALOGISTICS. Real-time tracking, warehousing, and e-commerce logistics built for modern businesses." },
     ],
   }),
   component: HomePage,
@@ -62,7 +62,7 @@ function HomePage() {
                 Fast, reliable delivery <span className="text-orange">— anywhere</span> in the world.
               </h1>
               <p className="mt-6 max-w-xl text-lg text-white/80">
-                From your door to the other side of the globe, Veloxa moves your shipments with speed, transparency, and care you can count on.
+                From your door to the other side of the globe, VURALOGISTICS moves your shipments with speed, transparency, and care you can count on.
               </p>
 
               {/* Track box */}
@@ -265,7 +265,7 @@ function HomePage() {
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {[
-              { name: "Amelia Carter", role: "Founder, Carter Goods", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80", quote: "Veloxa scaled with us from 50 to 5,000 orders a month. Their tracking is the smoothest we've used." },
+              { name: "Amelia Carter", role: "Founder, Carter Goods", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80", quote: "VURALOGISTICS scaled with us from 50 to 5,000 orders a month. Their tracking is the smoothest we've used." },
               { name: "Marcus Lee", role: "Ops Manager, NovaTech", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80", quote: "International shipping used to be a nightmare. Now it's just a tab in our dashboard. Incredible team." },
               { name: "Sara Okafor", role: "E-com Director, Loomly", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80", quote: "The warehousing service paid for itself in the first month. Inventory accuracy hit 99.8%." },
             ].map((t) => (

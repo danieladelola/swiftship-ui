@@ -8,7 +8,7 @@ import { Truck, MapPin, Plane, Warehouse, ShoppingBag, Boxes, ArrowRight } from 
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Services — Local, International & E-commerce Logistics | Veloxa" },
+      { title: "Services — Local, International & E-commerce Logistics | VURALOGISTICS" },
       { name: "description", content: "Local delivery, interstate, international shipping, warehousing, e-commerce logistics, and cargo handling — all from one trusted partner." },
     ],
   }),

@@ -9,8 +9,8 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Veloxa — Get a Quote or Talk to Logistics Experts" },
-      { name: "description", content: "Get in touch with Veloxa. Phone, email, office address, and a 24/7 contact form for shipping quotes and support." },
+      { title: "Contact VURALOGISTICS — Get a Quote or Talk to Logistics Experts" },
+      { name: "description", content: "Get in touch with VURALOGISTICS. Phone, email, office address, and a 24/7 contact form for shipping quotes and support." },
     ],
   }),
   component: ContactPage,
@@ -99,40 +99,8 @@ function ContactPage() {
 
           {/* Contact info */}
           <div className="reveal space-y-4 lg:col-span-2">
-            {[
-              { icon: Phone, title: "Call us", lines: ["+1 (415) 555-0199", "Mon–Sun, 24/7 support"] },
-              { icon: Mail, title: "Email us", lines: ["hello@veloxa.com", "support@veloxa.com"] },
-              { icon: MapPin, title: "Visit us", lines: ["221 Harbor Avenue, Suite 500", "San Francisco, CA 94107"] },
-            ].map((c) => (
-              <div key={c.title} className="flex gap-4 rounded-2xl border border-border bg-card p-6 shadow-card">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl gradient-accent text-primary">
-                  <c.icon className="h-5 w-5" />
-                </span>
-                <div>
-                  <h3 className="font-semibold text-navy">{c.title}</h3>
-                  {c.lines.map((l) => (
-                    <p key={l} className="text-sm text-muted-foreground">{l}</p>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
-              <h3 className="font-semibold text-navy">Follow us</h3>
-              <div className="mt-3 flex gap-3">
-                {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-navy transition-colors hover:gradient-accent hover:text-primary"
-                  >
-                    <Icon className="h-4 w-4" />
-                  </a>
-                ))}
-              </div>
-            </div>
+            <ContactInfoCards />
           </div>
-        </div>
       </section>
 
       {/* Map placeholder */}
@@ -149,7 +117,7 @@ function ContactPage() {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="rounded-2xl bg-card/95 px-6 py-5 text-center shadow-elevated backdrop-blur">
                 <MapPinned className="mx-auto h-8 w-8 text-orange" />
-                <div className="mt-2 font-display text-lg font-bold text-navy">Veloxa HQ</div>
+                <div className="mt-2 font-display text-lg font-bold text-navy">VURALOGISTICS HQ</div>
                 <div className="text-xs text-muted-foreground">221 Harbor Avenue, San Francisco</div>
               </div>
             </div>
