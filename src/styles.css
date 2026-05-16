@@ -160,3 +160,11 @@
     transform: translateY(0);
   }
 }
+
+@media print {
+  body * { visibility: hidden; }
+  #shipment-result, #shipment-result * { visibility: visible; }
+  #shipment-result { position: absolute; left: 0; top: 0; width: 100%; padding: 0; margin: 0; }
+  .print\:hidden, header, footer, nav, button { display: none !important; }
+  @page { size: A4; margin: 14mm; }
+}

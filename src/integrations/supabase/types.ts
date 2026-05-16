@@ -163,6 +163,159 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          accent_color: string
+          address: string
+          button_color: string
+          created_at: string
+          dark_logo_url: string | null
+          default_delivery_note: string
+          default_payment_status: string
+          default_status: string
+          email: string
+          favicon_url: string | null
+          footer_text: string
+          google_map_embed: string | null
+          id: string
+          light_logo_url: string | null
+          main_logo_url: string | null
+          pdf_footer_note: string
+          pdf_logo_url: string | null
+          pdf_show_company_address: boolean
+          pdf_show_payment_status: boolean
+          pdf_show_receiver_email: boolean
+          pdf_show_sender: boolean
+          pdf_terms: string
+          pdf_title: string
+          phone: string
+          primary_color: string
+          secondary_color: string
+          social_facebook: string | null
+          social_instagram: string | null
+          social_linkedin: string | null
+          social_twitter: string | null
+          text_color: string
+          tracking_prefix: string
+          updated_at: string
+          website_name: string
+          website_tagline: string
+          whatsapp: string
+        }
+        Insert: {
+          accent_color?: string
+          address?: string
+          button_color?: string
+          created_at?: string
+          dark_logo_url?: string | null
+          default_delivery_note?: string
+          default_payment_status?: string
+          default_status?: string
+          email?: string
+          favicon_url?: string | null
+          footer_text?: string
+          google_map_embed?: string | null
+          id?: string
+          light_logo_url?: string | null
+          main_logo_url?: string | null
+          pdf_footer_note?: string
+          pdf_logo_url?: string | null
+          pdf_show_company_address?: boolean
+          pdf_show_payment_status?: boolean
+          pdf_show_receiver_email?: boolean
+          pdf_show_sender?: boolean
+          pdf_terms?: string
+          pdf_title?: string
+          phone?: string
+          primary_color?: string
+          secondary_color?: string
+          social_facebook?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_twitter?: string | null
+          text_color?: string
+          tracking_prefix?: string
+          updated_at?: string
+          website_name?: string
+          website_tagline?: string
+          whatsapp?: string
+        }
+        Update: {
+          accent_color?: string
+          address?: string
+          button_color?: string
+          created_at?: string
+          dark_logo_url?: string | null
+          default_delivery_note?: string
+          default_payment_status?: string
+          default_status?: string
+          email?: string
+          favicon_url?: string | null
+          footer_text?: string
+          google_map_embed?: string | null
+          id?: string
+          light_logo_url?: string | null
+          main_logo_url?: string | null
+          pdf_footer_note?: string
+          pdf_logo_url?: string | null
+          pdf_show_company_address?: boolean
+          pdf_show_payment_status?: boolean
+          pdf_show_receiver_email?: boolean
+          pdf_show_sender?: boolean
+          pdf_terms?: string
+          pdf_title?: string
+          phone?: string
+          primary_color?: string
+          secondary_color?: string
+          social_facebook?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_twitter?: string | null
+          text_color?: string
+          tracking_prefix?: string
+          updated_at?: string
+          website_name?: string
+          website_tagline?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      staff_permissions: {
+        Row: {
+          can_create_shipments: boolean
+          can_delete_shipments: boolean
+          can_edit_shipments: boolean
+          can_update_location: boolean
+          can_view_settings: boolean
+          can_view_shipments: boolean
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          can_create_shipments?: boolean
+          can_delete_shipments?: boolean
+          can_edit_shipments?: boolean
+          can_update_location?: boolean
+          can_view_settings?: boolean
+          can_view_shipments?: boolean
+          created_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          can_create_shipments?: boolean
+          can_delete_shipments?: boolean
+          can_edit_shipments?: boolean
+          can_update_location?: boolean
+          can_view_settings?: boolean
+          can_view_shipments?: boolean
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

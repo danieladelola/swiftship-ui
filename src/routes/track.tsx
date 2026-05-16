@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { supabase } from "@/integrations/supabase/client";
+import { useSettings } from "@/lib/settings";
 import jsPDF from "jspdf";
 import {
   Search, PackageSearch, Package, Truck, PackageCheck, MapPin,
@@ -38,6 +39,7 @@ function statusIcon(status: string) {
 
 function TrackPage() {
   useScrollReveal();
+  const { settings } = useSettings();
   const { tracking: urlTracking } = Route.useSearch();
   const navigate = useNavigate({ from: "/track" });
 
@@ -96,105 +98,183 @@ function TrackPage() {
     window.print();
   }
 
-  function handleDownloadPdf() {
+  async function loadLogoDataUrl(url: string | null): Promise<string | null> {
+    if (!url) return null;
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return await new Promise((resolve) => {
+        const r = new FileReader();
+        r.onloadend = () => resolve(r.result as string);
+        r.onerror = () => resolve(null);
+        r.readAsDataURL(blob);
+      });
+    } catch { return null; }
+  }
+
+  function hex(c: string): [number, number, number] {
+    const m = c.replace("#", "");
+    const f = m.length === 3 ? m.split("").map((x) => x + x).join("") : m;
+    return [parseInt(f.slice(0, 2), 16) || 15, parseInt(f.slice(2, 4), 16) || 27, parseInt(f.slice(4, 6), 16) || 61];
+  }
+
+  async function handleDownloadPdf() {
     if (!shipment) return;
     const doc = new jsPDF({ unit: "pt", format: "a4" });
-    const pageW = doc.internal.pageSize.getWidth();
-    let y = 50;
+    const W = doc.internal.pageSize.getWidth();
+    const H = doc.internal.pageSize.getHeight();
+    const M = 40;
+    const [pr, pg, pb] = hex(settings.primary_color);
+    const [ar, ag, ab] = hex(settings.accent_color);
 
-    // Header
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, pageW, 80, "F");
-    doc.setTextColor(255, 255, 255);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("VURA LOGISTICS", 40, 40);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("Shipment Tracking Report", 40, 58);
-    doc.text(`Generated: ${new Date().toLocaleString()}`, pageW - 40, 58, { align: "right" });
-    y = 110;
+    // Header band
+    doc.setFillColor(pr, pg, pb);
+    doc.rect(0, 0, W, 110, "F");
 
-    // Tracking + status
-    doc.setTextColor(15, 23, 42);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(`Tracking #: ${shipment.tracking_number}`, 40, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.setTextColor(220, 120, 30);
-    doc.text(`Status: ${shipment.status}`, 40, y + 18);
-    doc.setTextColor(60, 60, 60);
-    doc.text(`Current Location: ${shipment.current_location || "—"}`, 40, y + 34);
-    y += 60;
-
-    const section = (title: string) => {
-      doc.setFont("helvetica", "bold"); doc.setFontSize(12);
-      doc.setTextColor(15, 23, 42);
-      doc.text(title, 40, y);
-      doc.setDrawColor(220);
-      doc.line(40, y + 4, pageW - 40, y + 4);
-      y += 18;
-      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-      doc.setTextColor(60, 60, 60);
-    };
-    const row = (k: string, v?: string | number | null) => {
-      if (y > 760) { doc.addPage(); y = 50; }
-      doc.setFont("helvetica", "bold"); doc.text(`${k}:`, 40, y);
-      doc.setFont("helvetica", "normal");
-      const text = String(v ?? "—");
-      const lines = doc.splitTextToSize(text, pageW - 180);
-      doc.text(lines, 150, y);
-      y += 14 * lines.length;
-    };
-
-    section("Sender");
-    row("Name", shipment.sender_name);
-    row("Phone", shipment.sender_phone);
-    row("Email", shipment.sender_email);
-    row("Address", shipment.sender_address);
-    y += 8;
-
-    section("Receiver");
-    row("Name", shipment.receiver_name);
-    row("Phone", shipment.receiver_phone);
-    row("Email", shipment.receiver_email);
-    row("Address", shipment.receiver_address);
-    y += 8;
-
-    section("Package");
-    row("Name", shipment.package_name);
-    row("Type", shipment.package_type);
-    row("Weight", shipment.package_weight ? `${shipment.package_weight} kg` : null);
-    row("Quantity", shipment.package_quantity);
-    y += 8;
-
-    section("Route");
-    row("Pickup", shipment.pickup_location);
-    row("Delivery", shipment.delivery_location);
-    row("Estimated Delivery", shipment.estimated_delivery_date);
-    y += 8;
-
-    section("Shipment History");
-    if (!history.length) {
-      row("—", "No updates yet");
-    } else {
-      history.forEach((u) => {
-        if (y > 760) { doc.addPage(); y = 50; }
-        doc.setFont("helvetica", "bold");
-        doc.text(`• ${u.status || "Update"}${u.location ? ` — ${u.location}` : ""}`, 40, y);
-        y += 13;
-        doc.setFont("helvetica", "normal");
-        doc.text(new Date(u.created_at).toLocaleString(), 52, y);
-        y += 13;
-        if (u.note) {
-          const lines = doc.splitTextToSize(`Note: ${u.note}`, pageW - 100);
-          doc.text(lines, 52, y);
-          y += 13 * lines.length;
-        }
-        y += 4;
-      });
+    const logoUrl = settings.pdf_logo_url || settings.main_logo_url;
+    const logo = await loadLogoDataUrl(logoUrl);
+    if (logo) {
+      try { doc.addImage(logo, "PNG", M, 28, 54, 54); } catch { /* ignore */ }
     }
+    const titleX = logo ? M + 70 : M;
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(20);
+    doc.text(settings.website_name, titleX, 52);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    doc.text(settings.pdf_title, titleX, 70);
+    doc.setFontSize(8); doc.setTextColor(255, 255, 255, 0.85);
+    doc.text(`Generated ${new Date().toLocaleString()}`, titleX, 84);
+
+    // Company info right
+    doc.setFontSize(9); doc.setTextColor(230, 235, 245);
+    const right: string[] = [settings.email, settings.phone];
+    if (settings.pdf_show_company_address) right.push(settings.address);
+    right.forEach((t, i) => doc.text(t, W - M, 40 + i * 13, { align: "right" }));
+
+    let y = 140;
+
+    // Status summary card
+    doc.setFillColor(248, 250, 252);
+    doc.setDrawColor(229, 231, 235);
+    doc.roundedRect(M, y, W - M * 2, 90, 8, 8, "FD");
+    doc.setTextColor(100, 116, 139); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+    doc.text("TRACKING NUMBER", M + 16, y + 20);
+    doc.setTextColor(pr, pg, pb); doc.setFont("helvetica", "bold"); doc.setFontSize(16);
+    doc.text(shipment.tracking_number, M + 16, y + 40);
+
+    // status badge
+    const badgeW = 130, badgeH = 26, bx = W - M - 16 - badgeW, by = y + 16;
+    doc.setFillColor(ar, ag, ab);
+    doc.roundedRect(bx, by, badgeW, badgeH, 13, 13, "F");
+    doc.setTextColor(255, 255, 255); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
+    doc.text(shipment.status.toUpperCase(), bx + badgeW / 2, by + 17, { align: "center" });
+
+    // current location + eta
+    doc.setTextColor(100, 116, 139); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+    doc.text("CURRENT LOCATION", M + 16, y + 60);
+    doc.text("ESTIMATED DELIVERY", W / 2, y + 60);
+    doc.setTextColor(30, 41, 59); doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+    doc.text(String(shipment.current_location || "—"), M + 16, y + 76);
+    doc.text(String(shipment.estimated_delivery_date || "—"), W / 2, y + 76);
+    y += 110;
+
+    // Two-column sender/receiver
+    const colW = (W - M * 2 - 16) / 2;
+    const renderParty = (title: string, x: number, data: Array<[string, string | null | undefined]>) => {
+      doc.setFillColor(255, 255, 255); doc.setDrawColor(229, 231, 235);
+      doc.roundedRect(x, y, colW, 130, 6, 6, "FD");
+      doc.setTextColor(pr, pg, pb); doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+      doc.text(title, x + 14, y + 22);
+      doc.setDrawColor(ar, ag, ab); doc.setLineWidth(1.5);
+      doc.line(x + 14, y + 27, x + 60, y + 27);
+      doc.setLineWidth(0.5);
+      let ry = y + 46;
+      data.forEach(([k, v]) => {
+        doc.setTextColor(100, 116, 139); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+        doc.text(k.toUpperCase(), x + 14, ry);
+        doc.setTextColor(30, 41, 59); doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+        const lines = doc.splitTextToSize(String(v ?? "—"), colW - 28);
+        doc.text(lines.slice(0, 1), x + 14, ry + 12);
+        ry += 26;
+      });
+    };
+    if (settings.pdf_show_sender) {
+      renderParty("SENDER", M, [
+        ["Name", shipment.sender_name],
+        ["Phone", shipment.sender_phone],
+        ["Address", shipment.sender_address],
+      ]);
+    }
+    renderParty("RECEIVER", settings.pdf_show_sender ? M + colW + 16 : M, [
+      ["Name", shipment.receiver_name],
+      ["Phone", shipment.receiver_phone],
+      ...(settings.pdf_show_receiver_email ? [["Email", shipment.receiver_email] as [string, string]] : []),
+      ["Address", shipment.receiver_address],
+    ]);
+    y += 145;
+
+    // Package grid
+    doc.setFillColor(255, 255, 255); doc.setDrawColor(229, 231, 235);
+    doc.roundedRect(M, y, W - M * 2, 100, 6, 6, "FD");
+    doc.setTextColor(pr, pg, pb); doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+    doc.text("PACKAGE & ROUTE", M + 14, y + 22);
+    const items: Array<[string, string]> = [
+      ["Package", shipment.package_name || "—"],
+      ["Type", shipment.package_type || "—"],
+      ["Weight", shipment.package_weight ? `${shipment.package_weight} kg` : "—"],
+      ["Quantity", String(shipment.package_quantity ?? "—")],
+      ["Pickup", shipment.pickup_location || "—"],
+      ["Delivery", shipment.delivery_location || "—"],
+    ];
+    if (settings.pdf_show_payment_status) items.push(["Payment", shipment.payment_status || "—"]);
+    items.forEach((it, i) => {
+      const col = i % 4, row = Math.floor(i / 4);
+      const cx = M + 14 + col * ((W - M * 2 - 28) / 4);
+      const cy = y + 46 + row * 26;
+      doc.setTextColor(100, 116, 139); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+      doc.text(it[0].toUpperCase(), cx, cy);
+      doc.setTextColor(30, 41, 59); doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+      doc.text(it[1], cx, cy + 12);
+    });
+    y += 120;
+
+    // Timeline table
+    doc.setTextColor(pr, pg, pb); doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+    doc.text("SHIPMENT TIMELINE", M, y); y += 10;
+    // header row
+    doc.setFillColor(pr, pg, pb);
+    doc.rect(M, y, W - M * 2, 22, "F");
+    doc.setTextColor(255, 255, 255); doc.setFont("helvetica", "bold"); doc.setFontSize(8);
+    const cols = [
+      { x: M + 10, w: 110, label: "DATE" },
+      { x: M + 130, w: 140, label: "LOCATION" },
+      { x: M + 280, w: 100, label: "STATUS" },
+      { x: M + 390, w: W - M - 400, label: "NOTE" },
+    ];
+    cols.forEach((c) => doc.text(c.label, c.x, y + 15));
+    y += 22;
+    doc.setTextColor(30, 41, 59); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+    const rows = history.length ? history : [{ created_at: shipment.created_at, location: "—", status: shipment.status, note: "Shipment created" }];
+    rows.forEach((u: any, idx: number) => {
+      if (y > H - 80) { doc.addPage(); y = 50; }
+      if (idx % 2 === 0) { doc.setFillColor(248, 250, 252); doc.rect(M, y, W - M * 2, 24, "F"); }
+      doc.text(new Date(u.created_at).toLocaleDateString(), cols[0].x, y + 15);
+      doc.text(String(u.location || "—").substring(0, 24), cols[1].x, y + 15);
+      doc.text(String(u.status || "—").substring(0, 18), cols[2].x, y + 15);
+      const noteLines = doc.splitTextToSize(String(u.note || "—"), cols[3].w);
+      doc.text(noteLines.slice(0, 1), cols[3].x, y + 15);
+      y += 24;
+    });
+
+    // Footer
+    const footerY = H - 60;
+    doc.setDrawColor(229, 231, 235); doc.line(M, footerY, W - M, footerY);
+    doc.setTextColor(pr, pg, pb); doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+    doc.text(settings.pdf_footer_note, M, footerY + 16);
+    doc.setTextColor(120, 130, 150); doc.setFont("helvetica", "normal"); doc.setFontSize(7);
+    const terms = doc.splitTextToSize(settings.pdf_terms, W - M * 2);
+    doc.text(terms.slice(0, 2), M, footerY + 30);
+    doc.text(settings.footer_text.replace(/\{year\}/g, String(new Date().getFullYear())), W - M, H - 20, { align: "right" });
 
     doc.save(`${shipment.tracking_number}.pdf`);
   }

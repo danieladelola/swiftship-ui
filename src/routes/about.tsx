@@ -8,8 +8,8 @@ import { Target, Eye, ShieldCheck, Users, Globe2, Award } from "lucide-react";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Veloxa — Our Story, Mission & Vision" },
-      { name: "description", content: "Learn about Veloxa's mission to make global logistics fast, transparent, and accessible to every business." },
+      { title: "About VURALOGISTICS — Our Story, Mission & Vision" },
+      { name: "description", content: "Learn about VURALOGISTICS's mission to make global logistics fast, transparent, and accessible to every business." },
     ],
   }),
   component: AboutPage,
@@ -25,12 +25,12 @@ function AboutPage() {
       <section className="bg-secondary px-6 py-20 lg:px-10 lg:py-28">
         <div className="mx-auto max-w-7xl">
           <div className="reveal max-w-3xl">
-            <span className="text-sm font-semibold uppercase tracking-wider text-orange">About Veloxa</span>
+            <span className="text-sm font-semibold uppercase tracking-wider text-orange">About VURALOGISTICS</span>
             <h1 className="mt-3 font-display text-5xl font-bold leading-tight text-navy md:text-6xl">
               Moving the world forward, one shipment at a time.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground">
-              Founded in 2010, Veloxa has grown from a small local courier into a global logistics partner trusted by over 12,000 businesses across 120+ countries.
+              Founded in 2010, VURALOGISTICS has grown from a small local courier into a global logistics partner trusted by over 12,000 businesses across 120+ countries.
             </p>
           </div>
         </div>

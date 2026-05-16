@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
+import { SettingsProvider } from "@/lib/settings";
 import { useEffect } from "react";
 import { ensureSeed } from "@/lib/seed-admin";
 
@@ -76,10 +77,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Veloxa — Fast & Reliable Logistics" },
-      { name: "description", content: "Veloxa delivers fast, reliable, and global logistics solutions. Track shipments, ship internationally, and grow your business." },
-      { name: "author", content: "Veloxa" },
-      { property: "og:title", content: "Veloxa — Fast & Reliable Logistics" },
+      { title: "VURALOGISTICS — Fast & Reliable Logistics" },
+      { name: "description", content: "VURALOGISTICS delivers fast, reliable, and global logistics solutions. Track shipments, ship internationally, and grow your business." },
+      { name: "author", content: "VURALOGISTICS" },
+      { property: "og:title", content: "VURALOGISTICS — Fast & Reliable Logistics" },
       { property: "og:description", content: "Fast, reliable, global logistics — local delivery, international shipping, warehousing, and more." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -119,8 +120,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
-        <Toaster />
+        <SettingsProvider>
+          <Outlet />
+          <Toaster />
+        </SettingsProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
